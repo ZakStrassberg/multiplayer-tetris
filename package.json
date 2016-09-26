@@ -1,5 +1,5 @@
 {
-  "name": "MongooseDash",
+  "name": "Tetromino",
   "version": "0.0.1",
   "dependencies": {
     "body-parser": "latest",
