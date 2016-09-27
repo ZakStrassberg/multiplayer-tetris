@@ -319,16 +319,21 @@ function removeLines() {
   if (n > 0) {
     addRows(n);
     addScore(100*Math.pow(2,n-1)); // 1: 100, 2: 200, 3: 400, 4: 800
+    socket.emit('sendLines', n-1);
   }
 }
 function removeLine(n) {
   var x, y;
   for(y = n ; y >= 0 ; --y) {
-    for(x = 0 ; x < nx ; ++x)
-    setBlock(x, y, (y == 0) ? null : getBlock(x, y-1));
+    for(x = 0 ; x < nx ; ++x) {
+      setBlock(x, y, (y == 0) ? null : getBlock(x, y-1));
+    }
   }
 }
 
+socket.on('addLine', function() {
+  addLine();
+})
 function addLine() {
   moveAllBlocksUp();
   var gap = false;

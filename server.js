@@ -51,6 +51,15 @@ io.sockets.on('connection', function (socket) {
     }
   })
 
+  socket.on('sendLines', function(n) {
+    console.log(n, 'lines sent')
+    for (var i = 0; i < n; i++) {
+      randomSocketId = players[Math.floor(Math.random()*players.length)].id
+      socket.broadcast.to(randomSocketId).emit('addLine')
+      console.log("sending line to", randomSocketId)
+    }
+  })
+
   socket.on('disconnect', function() {
     players.splice(players.indexOf(socket.id), 1)
     console.log(socket.id, 'disconnected')
