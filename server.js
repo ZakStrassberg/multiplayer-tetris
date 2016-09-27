@@ -21,8 +21,8 @@ var server = app.listen( port, function() {
 var io       = require('socket.io').listen(server)
 
 io.sockets.on('connection', function (socket) {
-  console.log("WE ARE USING SOCKETS!");
-  console.log(socket.id);
+  var socketId = socket.id;
+  console.log(socketId, "connected")
 
   socket.on('start game', function(name) {
     console.log(socket.id, 'joined the game')
@@ -36,14 +36,13 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('score', function(score) {
     for (var player of players) {
-      if (player.id == socket.id) {
+      if (player.id == socketId) {
         player.score = score;
       }
     }
   })
 
   socket.on('row', function(rows) {
-    console.log("ROW!!!!!")
     for (var player of players) {
       if (player.id == socket.id) {
         player.rows = rows;
@@ -52,11 +51,22 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on('sendLines', function(n) {
-    console.log(n, 'lines sent')
-    for (var i = 0; i < n; i++) {
-      randomSocketId = players[Math.floor(Math.random()*players.length)].id
-      socket.broadcast.to(randomSocketId).emit('addLine')
-      console.log("sending line to", randomSocketId)
+    if (players.length > 1) {
+      console.log(n, 'lines sent')
+      var sender;
+      for (var player of players) {
+        if (player.id == socket.id) {
+          sender = player;
+        }
+      }
+      for (var i = 1; i < n; i++) {
+        randomPlayer = players[Math.floor(Math.random()*players.length)]
+        while (randomSocketId != socketId) {
+          randomPlayer = players[Math.floor(Math.random()*players.length)]
+        }
+        socket.broadcast.to(randomPlayer.id).emit('addLine')
+        console.log(sender.name, "is sending line to", randomPlayer.name)
+      }
     }
   })
 

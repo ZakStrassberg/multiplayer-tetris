@@ -1,4 +1,4 @@
-Vue.use(VueSocketio, 'localhost:8000')
+Vue.use(VueSocketio, 'tetromino.herokuapp.com')
 
 var app = new Vue({
 	el: '#tetris',
