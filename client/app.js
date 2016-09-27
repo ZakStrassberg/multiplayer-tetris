@@ -1,18 +1,27 @@
-var myApp = angular.module('Myapp', ['ngRoute']);
-// We instantiate our application and we inject ngrouter so that it's available
-// and so that we can use it to set up our routes below. 
+Vue.use(VueSocketio, 'localhost:8000')
 
-
-
-// this is our router. You can choose to set your controllers on the partial
-// but I prefer to set my controllers here because it's cleaner
-(function(){
-	myApp.config(function($routeProvider){
-		$routeProvider
-			.when('/', 
-			{
-				controller: 'indexController',
-				templateUrl: "partials/index.html"
+var app = new Vue({
+	el: '#tetris',
+	data: {
+		name: '',
+		players: []
+	},
+	computed: {
+		sortedPlayers: function() {
+			return this.players.sort(function(a, b) {
+				if (a.score < b.score) { return 1 }
+				if (a.score > b.score) { return -1 }
+				return 0
 			})
-	})
-}());
+		}
+	},
+	sockets: {
+		connect: function() {},
+		updateScoreboard: function(activePlayers) {
+			this.players = activePlayers
+			// console.log(this.players)
+		}
+	}
+})
+
+app.name = prompt("Please enter your name")
