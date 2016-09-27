@@ -180,6 +180,7 @@ function keydown(ev) {
       case KEY.UP:     actions.push(DIR.UP);    handled = true; break;
       case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
       case KEY.ESC:    lose();                  handled = true; break;
+      case KEY.SPACE:  dropBlock();             handled = true; break;
     }
   }
   else if (ev.keyCode == KEY.SPACE) {
@@ -329,6 +330,10 @@ function removeLine(n) {
       setBlock(x, y, (y == 0) ? null : getBlock(x, y-1));
     }
   }
+}
+
+function dropBlock() {
+  while (move(DIR.DOWN)) {}
 }
 
 socket.on('addLine', function() {
