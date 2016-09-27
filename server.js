@@ -61,7 +61,7 @@ io.sockets.on('connection', function (socket) {
       }
       for (var i = 1; i < n; i++) {
         randomPlayer = players[Math.floor(Math.random()*players.length)]
-        while (randomSocketId != socketId) {
+        while (randomPlayer.id == socketId) {
           randomPlayer = players[Math.floor(Math.random()*players.length)]
         }
         socket.broadcast.to(randomPlayer.id).emit('addLine')
