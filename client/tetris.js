@@ -360,7 +360,7 @@ function addLine() {
   moveAllBlocksUp();
   var gap = false;
   for (var x = 0; x < nx; ++x) {
-    if (Math.random() < 1) {
+    if (Math.random() < .9) {
       setBlock(x, ny-1, xx)
     } else {
       gap = true;

@@ -85,18 +85,14 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on('boardImage', function(image) {
-    boards[socketId] = image;
-    // console.log(boards)
+    for (var player of players) {
+      if (player.id == socketId) {
+        player.board = image;
+      }
+    }
   })
 })
 
-var timer = 0;
 setInterval(function() {
   io.emit('updateScoreboard', players)
-  while (timer % 5 == 0 && Object.keys(boards).length) {
-    console.log('sending boards:')
-    io.emit('sendBoards', boards)
-    timer++
-  }
-  timer++
 }, 1000)

@@ -1,7 +1,7 @@
-Vue.use(VueSocketio, 'localhost:8000')
+Vue.use(VueSocketio, 'tetromino.herokuapp.com')
 
 var tetris = new Vue({
-	el: '#tetris',
+	el: '#container',
 	data: {
 		name: '',
 		players: [],
@@ -21,19 +21,6 @@ var tetris = new Vue({
 		updateScoreboard: function(activePlayers) {
 			this.players = activePlayers
 			// console.log(this.players)
-		}
-	}
-})
-
-var boards = new Vue({
-	el: '#boards',
-	data: {
-		boards: []
-	},
-	sockets: {
-		connect: function() {},
-		sendBoards: function(activeBoards) {
-			this.boards = activeBoards
 		}
 	}
 })
