@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <title>Tetris - MEAN project week</title>
+  <style>
+  </style>
+
+</head>
+<body>
+  <div id="boards">
+
+    <img v-for="board in boards" :src="board">
+      {{ board }}
+  </div>
+  <script type="text/javascript" src="vue.js"></script>
+  <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type ="text/javascript" src="/vue-socketio.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

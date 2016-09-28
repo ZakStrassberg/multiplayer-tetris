@@ -35,7 +35,7 @@
         <p>Scoreboard:</p>
         <table>
           <tbody id="scores">
-            <tr v-for="player in sortedPlayers" :key="player.id">
+            <tr v-for="player in sortedPlayers" :key="player.id" v-if="">
               <td>{{ player.name }}</td>
               <td>{{ player.rows }}</td>
               <td>{{ player.score }}</td>
@@ -52,9 +52,11 @@
   <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type ="text/javascript" src="/vue-socketio.min.js"></script>
   <script src="app.js"></script>
+  <script>
+  tetris.name = prompt("Please enter your name")
+
+  </script>
   <script src="stats.js"></script>
   <script src="tetris.js"></script>
-
-</script>
 </body>
 </html>

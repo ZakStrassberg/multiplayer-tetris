@@ -41,7 +41,7 @@ function random(min, max)       { return (min + (Math.random() * (max - min))); 
 function randomChoice(choices)  { return choices[Math.round(random(0, choices.length-1))]; }
 
 // Constants:
-const KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
+const KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40, Z: 90, X: 88},
 DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, MIN: 0, MAX: 3 },
 stats   = new Stats(),
 canvas  = get('canvas'),
@@ -53,6 +53,8 @@ nx      = 10, // width of tetris court (in blocks)
 ny      = 20, // height of tetris court (in blocks)
 nu      = 5,  // width/height of upcoming preview (in blocks)
 socket  = io();
+
+
 
 // Variables:
 var dx, dy,        // pixel size of a single tetris block
@@ -181,6 +183,8 @@ function keydown(ev) {
       case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
       case KEY.ESC:    lose();                  handled = true; break;
       case KEY.SPACE:  dropBlock();             handled = true; break;
+      case KEY.Z:      actions.push(DIR.UP);    handled = true; break;
+      case KEY.X:      actions.push(KEY.X);   handled = true; break;
     }
   }
   else if (ev.keyCode == KEY.SPACE) {
@@ -196,7 +200,7 @@ function play() {
   hide('start');
   reset();
   playing = true;
-  socket.emit('start game', app.name);
+  socket.emit('start game', tetris.name);
 }
 function lose() {
   show('start');
@@ -258,6 +262,7 @@ function handle(action) {
     case DIR.LEFT:  move(DIR.LEFT);  break;
     case DIR.RIGHT: move(DIR.RIGHT); break;
     case DIR.UP:    rotate();        break;
+    case KEY.X:    reverseRotate();  break;
     case DIR.DOWN:  drop();          break;
   }
 }
@@ -285,6 +290,15 @@ function rotate() {
     invalidate();
   }
 }
+
+function reverseRotate() {
+  var newdir = (current.dir == DIR.MIN ? DIR.MAX : current.dir - 1);
+  if (unoccupied(current.type, current.x, current.y, newdir)) {
+    current.dir = newdir;
+    invalidate();
+  }
+}
+
 function drop() {
   if (!move(DIR.DOWN)) {
     addScore(10);
@@ -293,6 +307,8 @@ function drop() {
     setCurrentPiece(next);
     setNextPiece(randomPiece());
     clearActions();
+    var image = canvas.toDataURL()
+    socket.emit('boardImage', image)
     if (occupied(current.type, current.x, current.y, current.dir)) {
       lose();
     }
@@ -334,6 +350,7 @@ function removeLine(n) {
 
 function dropBlock() {
   while (move(DIR.DOWN)) {}
+  drop();
 }
 
 socket.on('addLine', function() {
@@ -366,26 +383,6 @@ function moveAllBlocksUp() {
     invalidate();
   }
 }
-
-// function move(dir) {
-//   var x = current.x, y = current.y;
-//   switch(dir) {
-//     case DIR.RIGHT: x = x + 1; break;
-//     case DIR.LEFT:  x = x - 1; break;
-//     case DIR.DOWN:  y = y + 1; break;
-//   }
-//   if (unoccupied(current.type, x, y, current.dir)) {
-//     current.x = x;
-//     current.y = y;
-//     invalidate();
-//     return true;
-//   }
-//   else {
-//     return false;
-//   }
-// }
-
-
 
 // Rendering:
 var invalid = {};
@@ -456,3 +453,8 @@ function drawBlock(ctx, x, y, color) {
 }
 // Run:
 run();
+
+// setInterval(function() {
+//     var image = canvas.toDataURL()
+//     socket.emit('boardImage', image)
+// }, 5000)

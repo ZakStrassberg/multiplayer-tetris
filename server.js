@@ -4,7 +4,9 @@ root     = __dirname,
 port     = process.env.PORT || 8000,
 bp       = require('body-parser'),
 app      = express(),
-players  = [];
+players  = [],
+boards = {};
+
 
 
 app.use( express.static( path.join( root, 'client' )));
@@ -65,18 +67,36 @@ io.sockets.on('connection', function (socket) {
           randomPlayer = players[Math.floor(Math.random()*players.length)]
         }
         socket.broadcast.to(randomPlayer.id).emit('addLine')
-        console.log(sender.name, "is sending line to", randomPlayer.name)
+        try {
+          console.log(sender.name, "is sending line to", randomPlayer.name)
+        }
+        catch(err) {
+            console.log("ERROR:")
+            console.log(err)
+        }
       }
     }
   })
 
   socket.on('disconnect', function() {
-    players.splice(players.indexOf(socket.id), 1)
+    players.splice(players.indexOf(socketId), 1)
+    delete boards[socketId]
     console.log(socket.id, 'disconnected')
+  })
+
+  socket.on('boardImage', function(image) {
+    boards[socketId] = image;
+    // console.log(boards)
   })
 })
 
+var timer = 0;
 setInterval(function() {
   io.emit('updateScoreboard', players)
-  // console.log(players)
+  while (timer % 5 == 0 && Object.keys(boards).length) {
+    console.log('sending boards:')
+    io.emit('sendBoards', boards)
+    timer++
+  }
+  timer++
 }, 1000)
