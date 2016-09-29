@@ -84,7 +84,7 @@ io.sockets.on('connection', function (socket) {
         // HIGH SCORE MANAGEMENT:
         for (var i = 0; i < dbScoreboard.length; i++) {
           if (dbScoreboard[i].score < player.score  && found == false) {
-            temp = dbScordboard[i]
+            temp = dbScoreboard[i]
             HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: player.name, score: player.score}, function(err, highScore) {
               if (err) {
                 console.log(err)
