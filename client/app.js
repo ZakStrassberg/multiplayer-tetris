@@ -24,7 +24,7 @@ var tetris = new Vue({
 		},
 		updateActivity: function(message) { //george
 			this.messages.unshift(message)
-			if (this.messages.length > 4) {
+			while (this.messages.length > 6) {
 				this.messages.pop()
 			}
 			// console.log(this.players)

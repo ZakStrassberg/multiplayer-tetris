@@ -45,7 +45,7 @@
     </div>
 
     <div id="boards" class="col-xs-12 col-md-6">
-      <div id="scoreboard">
+      <div id="scoreboard" class="col-xs-4">
         <p>Scoreboard:</p>
         <table>
           <tbody id="scores">
@@ -57,11 +57,11 @@
           </tbody>
         </table>
       </div>
-      <div id="scoreboard">
+      <div id="scoreboardDB" class="col-xs-4">
         <p>DB scoreboard:</p>
         <table>
           <tbody id="scores">
-            <tr v-for="player in sortedPlayers" :key="player.id" v-if="">
+            <tr v-for="player in sortedPlayers" :key="player.id">
               <td>{{ player.name }}</td>
               <td>{{ player.rows }}</td>
               <td>{{ player.score }}</td>
@@ -69,7 +69,7 @@
           </tbody>
         </table>
       </div>
-      <ul>
+      <ul  class="col-xs-4">
         <li v-for="message in messages"> {{ message }} </li>
       </ul>
       <div v-for="player in players" class="col-xs-4">
