@@ -61,7 +61,7 @@
         <p>DB scoreboard:</p>
         <table>
           <tbody id="scores">
-            <tr v-for="player in sortedPlayers" :key="player.id">
+            <tr v-for="player in highScores" :key="player.id">
               <td>{{ player.name }}</td>
               <td>{{ player.rows }}</td>
               <td>{{ player.score }}</td>

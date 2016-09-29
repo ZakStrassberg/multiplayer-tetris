@@ -30,6 +30,7 @@ HighScore.find({}, function(err, highScores){
     console.log(err);
   } else {
     dbScoreboard = highScores
+    console.log(highScores)
   }
 })
 
@@ -69,50 +70,61 @@ io.sockets.on('connection', function (socket) {
     }
     if (endingPlayer){
       io.emit('updateActivity', endingPlayer.name + " has lost with " + endingPlayer.score + " points.")
+
+      // HIGH SCORE MANAGEMENT:
+      var temp, temp2;
+      for (var i = 0; i < dbScoreboard.length; i++) {
+        console.log('\n\n\n LOOP:')
+        console.log(i)
+        if (dbScoreboard[i].score < endingPlayer.score && !temp) {
+          console.log('high score:', endingPlayer.score)
+          temp = dbScoreboard[i]
+          console.log('\n\n\n TEMP:')
+          console.log(temp)
+          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: endingPlayer.name, score: endingPlayer.score}, function(err, highScore) {
+            if (err) {
+              console.log(err)
+            }
+          })
+        }
+        if (temp && i < 4) {
+          temp2 = dbScoreboard[i+1]
+          console.log('\n\n\n')
+          console.log(i+1)
+          console.log(dbScoreboard[i+1])
+          console.log(temp)
+          HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
+            if (err) {
+              console.log(err)
+            }
+          })
+          temp = temp2
+        }
+      }
+      // SEND OUT UPDATED SCORES
+      HighScore.find({}, function(err, highScores){
+        if(err){
+          console.log('ERROR RETRIEVING HIGH SCORES:');
+          console.log(err);
+        } else {
+          dbScoreboard = highScores
+        }
+      })
+      io.emit('updateDbScoreboard', dbScoreboard)
+
+      // REMOVE PLAYER
       players.splice(players.indexOf(endingPlayer), 1)
     } else {
       console.log("something went wrong. a player left but I couldn't find them.")
     }
+
+
   })
 
   socket.on('score', function(score) {
-    var found = false, temp, temp2;
     for (var player of players) {
       if (player.id == socketId) {
         player.score = score;
-
-        // HIGH SCORE MANAGEMENT:
-        for (var i = 0; i < dbScoreboard.length; i++) {
-          if (dbScoreboard[i].score < player.score  && found == false) {
-            temp = dbScoreboard[i]
-            HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: player.name, score: player.score}, function(err, highScore) {
-              if (err) {
-                console.log(err)
-              }
-            })
-            found = true;
-          }
-          if (found = true && i < 5) {
-            temp2 = dbScoreboard[i+1]
-            HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
-              if (err) {
-                console.log(err)
-              }
-            })
-            temp = temp2
-          }
-        }
-        // SEND OUT UPDATED SCORES
-        HighScore.find({}, function(err, highScores){
-          if(err){
-            console.log('ERROR RETRIEVING HIGH SCORES:');
-            console.log(err);
-          } else {
-            dbScoreboard = highScores
-          }
-        })
-        io.emit('updateDbScoreboard', dbScoreboard)
-
       }
     }
   })
@@ -165,6 +177,48 @@ io.sockets.on('connection', function (socket) {
     if (disconnectingPlayer){
       io.emit('updateActivity', disconnectingPlayer.name + " has disconnected.")
       console.log(socket.id, 'disconnected')
+
+      // HIGH SCORE MANAGEMENT:
+      var temp, temp2;
+      for (var i = 0; i < dbScoreboard.length; i++) {
+        console.log('\n\n\n LOOP:')
+        console.log(i)
+        if (dbScoreboard[i].score < endingPlayer.score && !temp) {
+          console.log('high score:', endingPlayer.score)
+          temp = dbScoreboard[i]
+          console.log('\n\n\n TEMP:')
+          console.log(temp)
+          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: endingPlayer.name, score: endingPlayer.score}, function(err, highScore) {
+            if (err) {
+              console.log(err)
+            }
+          })
+        }
+        if (temp && i < 4) {
+          temp2 = dbScoreboard[i+1]
+          console.log('\n\n\n')
+          console.log(i+1)
+          console.log(dbScoreboard[i+1])
+          console.log(temp)
+          HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
+            if (err) {
+              console.log(err)
+            }
+          })
+          temp = temp2
+        }
+      }
+      // SEND OUT UPDATED SCORES
+      HighScore.find({}, function(err, highScores){
+        if(err){
+          console.log('ERROR RETRIEVING HIGH SCORES:');
+          console.log(err);
+        } else {
+          dbScoreboard = highScores
+        }
+      })
+      io.emit('updateDbScoreboard', dbScoreboard)
+
       players.splice(players.indexOf(disconnectingPlayer), 1)
     }
   })
