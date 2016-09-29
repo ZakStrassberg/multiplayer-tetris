@@ -307,11 +307,11 @@ function drop() {
     setCurrentPiece(next);
     setNextPiece(randomPiece());
     clearActions();
-    var image = canvas.toDataURL()
-    socket.emit('boardImage', image)
     if (occupied(current.type, current.x, current.y, current.dir)) {
       lose();
     }
+    var image = canvas.toDataURL()
+    socket.emit('boardImage', image)
   }
 }
 function dropPiece() {
