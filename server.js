@@ -89,7 +89,7 @@ io.sockets.on('connection', function (socket) {
         }
       }
     if (disconnectingPlayer){
-      io.emit('updateActivity', disconnectingPlayer.name, "has left the game.")
+      io.emit('updateActivity', disconnectingPlayer.name + " has left the game.")
       console.log(socket.id, 'disconnected')
       players.splice(players.indexOf(socketId), 1)
     }
