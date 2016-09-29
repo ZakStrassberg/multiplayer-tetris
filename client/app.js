@@ -6,7 +6,7 @@ var tetris = new Vue({
 		name: '',
 		players: [],
 		messages: [],
-		highScores = []
+		highScores: []
 	},
 	computed: {
 		sortedPlayers: function() {
