@@ -7,24 +7,51 @@ root        = __dirname,
 port        = process.env.PORT || 8000,
 bp          = require('body-parser'),
 app         = express(),
-players     = [];
+players     = [],
+mongoose    = require('mongoose'),
+dbScoreboard;
 
+//
+// ROUTING:
+//
 app.use( express.static( path.join( root, 'client' )));
 app.use( express.static( path.join( root, 'bower_components' )));
 app.use(bp.json())
-
-// require('./server/config/db.js');
 // require('./server/config/routes.js')(app);
 
+//
+// DATABASE:
+//
+require('./server/config/db.js');
+var HighScore = mongoose.model('HighScore');
+HighScore.find({}, function(err, highScores){
+  if(err){
+    console.log('ERROR RETRIEVING HIGH SCORES:');
+    console.log(err);
+  } else {
+    console.log("High scores:")
+    console.log(highScores)
+    dbScoreboard = highScores
+  }
+})
+
+//
+// START THE SERVER
+//
 var server = app.listen( port, function() {
   console.log( 'server running on port', port );
 });
 
+//
+// SOCKET.IO
+//
 var io = require('socket.io').listen(server)
 
 io.sockets.on('connection', function (socket) {
   var socketId = socket.id;
   console.log(socketId, "connected")
+  io.emit(updateScoreboard, players)
+  io.emit(updateDBScoreboard, dbScoreboard)
 
   socket.on('start game', function(name) {
     console.log(name, socketId, 'joined the game')
