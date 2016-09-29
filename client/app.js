@@ -25,6 +25,9 @@ var tetris = new Vue({
 		},
 		updateActivity: function(message) { //george
 			this.messages.push(message)
+			if (messages.length > 5) {
+				messages.splice(0, 1)
+			}
 			// console.log(this.players)
 		}
 	}

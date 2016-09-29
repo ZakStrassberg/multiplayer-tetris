@@ -106,4 +106,5 @@ io.sockets.on('connection', function (socket) {
 
 setInterval(function() {
   io.emit('updateScoreboard', players)
+  console.log(players)
 }, 1000)
