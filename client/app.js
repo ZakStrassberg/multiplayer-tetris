@@ -5,7 +5,6 @@ var tetris = new Vue({
 	data: {
 		name: '',
 		players: [],
-		socketId: '',
 		messages: []
 	},
 	computed: {
