@@ -281,6 +281,8 @@ function move(dir) {
   }
   else {
     return false;
+    var image = canvas.toDataURL()
+    socket.emit('boardImage', image)
   }
 }
 function rotate() {
@@ -310,8 +312,7 @@ function drop() {
     if (occupied(current.type, current.x, current.y, current.dir)) {
       lose();
     }
-    var image = canvas.toDataURL()
-    socket.emit('boardImage', image)
+
   }
 }
 function dropPiece() {
