@@ -1,7 +1,7 @@
 Vue.use(VueSocketio, 'tetromino.herokuapp.com')
 
 var tetris = new Vue({
-	el: '#container',
+	el: '#app',
 	data: {
 		name: '',
 		players: [],
