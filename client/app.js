@@ -5,7 +5,8 @@ var tetris = new Vue({
 	data: {
 		name: '',
 		players: [],
-		socketId: ''
+		socketId: '',
+		messages: []
 	},
 	computed: {
 		sortedPlayers: function() {
@@ -20,6 +21,10 @@ var tetris = new Vue({
 		connect: function() {},
 		updateScoreboard: function(activePlayers) {
 			this.players = activePlayers
+			// console.log(this.players)
+		},
+		updateActivity: function(message) { //george
+			this.messages.push(message)
 			// console.log(this.players)
 		}
 	}
