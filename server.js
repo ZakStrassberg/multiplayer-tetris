@@ -183,14 +183,16 @@ io.sockets.on('connection', function (socket) {
       for (var i = 0; i < dbScoreboard.length; i++) {
         console.log('\n\n\n LOOP:')
         console.log(i)
-        if (dbScoreboard[i].score < endingPlayer.score && !temp) {
-          console.log('high score:', endingPlayer.score)
+        if (dbScoreboard[i].score < disconnectingPlayer.score && !temp) {
+          console.log('high score:', disconnectingPlayer.score)
           temp = dbScoreboard[i]
           console.log('\n\n\n TEMP:')
           console.log(temp)
-          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: endingPlayer.name, score: endingPlayer.score}, function(err, highScore) {
+          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: disconnectingPlayer.name, score: disconnectingPlayer.score}, function(err, highScore) {
             if (err) {
               console.log(err)
+            } else {
+              highScore.save()
             }
           })
         }
@@ -203,6 +205,8 @@ io.sockets.on('connection', function (socket) {
           HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
             if (err) {
               console.log(err)
+            } else {
+              highScore.save()
             }
           })
           temp = temp2
