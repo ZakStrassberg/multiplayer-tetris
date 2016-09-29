@@ -1,6 +1,5 @@
 // logs:
 // heroku logs --app tetromino --source app -t
-"use strict";
 
 var express  = require( 'express' ),
 path     = require( 'path' ),
