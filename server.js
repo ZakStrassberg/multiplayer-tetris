@@ -1,15 +1,13 @@
 // logs:
 // heroku logs --app tetromino --source app -t
 
-var express  = require( 'express' ),
-path     = require( 'path' ),
-root     = __dirname,
-port     = process.env.PORT || 8000,
-bp       = require('body-parser'),
-app      = express(),
-players  = [];
-
-
+var express = require( 'express' ),
+path        = require( 'path' ),
+root        = __dirname,
+port        = process.env.PORT || 8000,
+bp          = require('body-parser'),
+app         = express(),
+players     = [];
 
 app.use( express.static( path.join( root, 'client' )));
 app.use( express.static( path.join( root, 'bower_components' )));
@@ -30,7 +28,10 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('start game', function(name) {
     console.log(name, socketId, 'joined the game')
-    players.push({id: socketId, name: name, score: 0, rows: 0})
+    var newPlayer = {id: socketId, name: name, score: 0, rows: 0}
+    console.log(newPlayer)
+    players.push(newPlayer)
+    console.log(players)
     io.emit('updateActivity', players[players.length].name + " has started a game.")
   })
 
