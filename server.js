@@ -29,11 +29,10 @@ HighScore.find({}, function(err, highScores){
     console.log('ERROR RETRIEVING HIGH SCORES:');
     console.log(err);
   } else {
-    console.log("High scores:")
-    console.log(highScores)
     dbScoreboard = highScores
   }
 })
+
 
 //
 // START THE SERVER
@@ -51,7 +50,7 @@ io.sockets.on('connection', function (socket) {
   var socketId = socket.id;
   console.log(socketId, "connected")
   io.emit('updateScoreboard', players)
-  io.emit('updateDBScoreboard', dbScoreboard)
+  io.emit('updateDbScoreboard', dbScoreboard)
 
   socket.on('start game', function(name) {
     console.log(name, socketId, 'joined the game')
@@ -77,9 +76,43 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on('score', function(score) {
+    var found = false, temp, temp2;
     for (var player of players) {
       if (player.id == socketId) {
         player.score = score;
+
+        // HIGH SCORE MANAGEMENT:
+        for (var i = 0; i < dbScoreboard.length; i++) {
+          if (dbScoreboard[i].score < player.score  && found == false) {
+            temp = dbScordboard[i]
+            HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: player.name, score: player.score}, function(err, highScore) {
+              if (err) {
+                console.log(err)
+              }
+            })
+            found = true;
+          }
+          if (found = true && i < 5) {
+            temp2 = dbScoreboard[i+1]
+            HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
+              if (err) {
+                console.log(err)
+              }
+            })
+            temp = temp2
+          }
+        }
+        // SEND OUT UPDATED SCORES
+        HighScore.find({}, function(err, highScores){
+          if(err){
+            console.log('ERROR RETRIEVING HIGH SCORES:');
+            console.log(err);
+          } else {
+            dbScoreboard = highScores
+          }
+        })
+        io.emit('updateDbScoreboard', dbScoreboard)
+
       }
     }
   })

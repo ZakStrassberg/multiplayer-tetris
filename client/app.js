@@ -5,7 +5,8 @@ var tetris = new Vue({
 	data: {
 		name: '',
 		players: [],
-		messages: []
+		messages: [],
+		highScores = []
 	},
 	computed: {
 		sortedPlayers: function() {
@@ -28,6 +29,9 @@ var tetris = new Vue({
 				this.messages.pop()
 			}
 			// console.log(this.players)
+		},
+		updateDbScoreboard: function(highScores) {
+			this.highScores = highScores
 		}
 	}
 })
