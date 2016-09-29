@@ -38,18 +38,6 @@
         <p><canvas id="upcoming"></canvas></p>
         <p>score <span id="score">00000</span></p>
         <p>rows <span id="rows">0</span></p>
-        <div id="scoreboard">
-          <p>Scoreboard:</p>
-          <table>
-            <tbody id="scores">
-              <tr v-for="player in sortedPlayers" :key="player.id" v-if="">
-                <td>{{ player.name }}</td>
-                <td>{{ player.rows }}</td>
-                <td>{{ player.score }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
       <canvas id="canvas">
         Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
@@ -57,6 +45,30 @@
     </div>
 
     <div id="boards" class="col-xs-12 col-md-6">
+      <div id="scoreboard">
+        <p>Scoreboard:</p>
+        <table>
+          <tbody id="scores">
+            <tr v-for="player in sortedPlayers" :key="player.id" v-if="">
+              <td>{{ player.name }}</td>
+              <td>{{ player.rows }}</td>
+              <td>{{ player.score }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="scoreboard">
+        <p>DB scoreboard:</p>
+        <table>
+          <tbody id="scores">
+            <tr v-for="player in sortedPlayers" :key="player.id" v-if="">
+              <td>{{ player.name }}</td>
+              <td>{{ player.rows }}</td>
+              <td>{{ player.score }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <ul>
         <li v-for="message in messages"> {{ message }} </li>
       </ul>
