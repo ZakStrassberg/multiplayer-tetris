@@ -1,3 +1,6 @@
+// logs:
+// heroku logs --app tetromino --source app -t
+
 var express  = require( 'express' ),
 path     = require( 'path' ),
 root     = __dirname,
@@ -63,8 +66,10 @@ io.sockets.on('connection', function (socket) {
       }
       for (var i = 1; i < n; i++) {
         randomPlayer = players[Math.floor(Math.random()*players.length)]
-        while (randomPlayer.id == socketId) {
+        var maxTries = 0;
+        while (randomPlayer.id == socketId && maxTries < 5) {
           randomPlayer = players[Math.floor(Math.random()*players.length)]
+          maxTries++
         }
         socket.broadcast.to(randomPlayer.id).emit('addLine')
         try {
