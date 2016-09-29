@@ -52,7 +52,7 @@ speed   = { start: 0.6, decrement: 0.005, min: 0.2 }, // how long before piece d
 nx      = 10, // width of tetris court (in blocks)
 ny      = 20, // height of tetris court (in blocks)
 nu      = 5,  // width/height of upcoming preview (in blocks)
-socket  = io();
+socket  = tetris.$socket;
 
 
 
