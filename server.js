@@ -32,7 +32,7 @@ io.sockets.on('connection', function (socket) {
     console.log(newPlayer)
     players.push(newPlayer)
     console.log(players)
-    io.emit('updateActivity', players[players.length].name + " has started a game.")
+    io.emit('updateActivity', players[players.length - 1].name + " has started a game.")
   })
 
   socket.on('end game', function(score) {
