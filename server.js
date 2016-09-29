@@ -108,9 +108,9 @@ io.sockets.on('connection', function (socket) {
           console.log(err);
         } else {
           dbScoreboard = highScores
+          io.emit('updateDbScoreboard', dbScoreboard)
         }
       })
-      io.emit('updateDbScoreboard', dbScoreboard)
 
       // REMOVE PLAYER
       players.splice(players.indexOf(endingPlayer), 1)
@@ -219,10 +219,11 @@ io.sockets.on('connection', function (socket) {
           console.log(err);
         } else {
           dbScoreboard = highScores
+          io.emit('updateDbScoreboard', dbScoreboard)
         }
       })
-      io.emit('updateDbScoreboard', dbScoreboard)
 
+      // remove disconnecting player
       players.splice(players.indexOf(disconnectingPlayer), 1)
     }
   })
