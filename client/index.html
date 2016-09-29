@@ -57,6 +57,9 @@
     </div>
 
     <div id="boards" class="col-xs-12 col-md-6">
+      <ul>
+        <li v-for="message in messages"> {{ message }} </li>
+      </ul>
       <div v-for="player in players" class="col-xs-4">
         <p>{{player.name}}</p>
         <img :src="player.board" alt="" class="img-responsive" />
