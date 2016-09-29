@@ -7,8 +7,7 @@ root     = __dirname,
 port     = process.env.PORT || 8000,
 bp       = require('body-parser'),
 app      = express(),
-players  = [],
-boards = {};
+players  = [];
 
 
 
@@ -84,9 +83,16 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on('disconnect', function() {
-    players.splice(players.indexOf(socketId), 1)
-    delete boards[socketId]
-    console.log(socket.id, 'disconnected')
+    for (var player of players) {
+        if (player.id == socket.id) {
+          var disconnectingPlayer = player
+        }
+      }
+    if (disconnectingPlayer){
+      io.emit('updateActivity', disconnectingPlayer.name, "has left the game.")
+      console.log(socket.id, 'disconnected')
+      players.splice(players.indexOf(socketId), 1)
+    }
   })
 
   socket.on('boardImage', function(image) {
