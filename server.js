@@ -31,8 +31,8 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('start game', function(name) {
     console.log(name, socketId, 'joined the game')
-    let index = players.push({id: socketId, name: name, score: 0, rows: 0})
-    io.emit('updateActivity', players[index].name + " has started a game.")
+    players.push({id: socketId, name: name, score: 0, rows: 0})
+    io.emit('updateActivity', players[players.length].name + " has started a game.")
   })
 
   socket.on('end game', function(score) {
