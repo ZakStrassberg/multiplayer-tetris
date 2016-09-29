@@ -1,13 +1,16 @@
+password        = process.env.mongoPassword
+
 var mongoose = require('mongoose');
 
-var fs = require('fs');
-
-mongoose.connect('mongodb://localhost/newDatabaseName');
-
-var models_path = __dirname + "/../models"
-
-fs.readdirSync(models_path).forEach(function(file){
-	if(file.indexOf('.js') > 0) {
-		require(models_path + '/' + file);
+mongoose.connect('mongodb://tetris:' + password + '@ds047166.mlab.com:47166/tetrishighscores', function(err) {
+	if (err) {
+		return console.error(err)
 	}
-})
+});
+
+var HighScoreSchema = new mongoose.Schema({
+    name: String,
+    score: Number
+});
+
+mongoose.model('HighScore', HighScoreSchema);
