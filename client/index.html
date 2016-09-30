@@ -83,20 +83,44 @@
           </div>
         </div>
         <div class="row">
-          <div v-for="player in players" class="col-xs-2" v-show="player.id != socketId">
+          <div v-for="player in players" class="col-xs-2 alert" v-bind:class="{ 'alert-info': player.id == socketId }">
             <h4>{{player.name}}</h4>
             <img :src="player.board" class="img-fluid" />
           </div>
         </div>
       </div>
     </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="name-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Please enter your name</h4>
+          </div>
+          <div class="modal-body">
+            <input v-model="name" class="form-control" placeholder="Name" type="text" @keyup.enter="hideModal">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Play tetris!</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
+
+
+
+  <!-- SCRIPTS -->
   <script type="text/javascript" src="vue.js"></script>
   <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type ="text/javascript" src="/vue-socketio.min.js"></script>
   <script src="app.js"></script>
   <script>
-  tetris.name = prompt("Please enter your name")
+  $('#name-modal').on('shown.bs.modal', function () {
+    $('#name-modal input').focus()
+  })
+  $('#name-modal').modal('show')
   </script>
   <script src="stats.js"></script>
   <script src="tetris.js"></script>

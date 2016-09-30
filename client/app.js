@@ -34,5 +34,10 @@ var tetris = new Vue({
 		updateDbScoreboard: function(highScores) {
 			this.highScores = highScores
 		}
+	},
+	methods: {
+		hideModal: function() {
+			jQuery('#name-modal').modal('hide')
+		}
 	}
 })
