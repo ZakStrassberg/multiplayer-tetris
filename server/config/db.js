@@ -10,7 +10,8 @@ mongoose.connect('mongodb://tetris:' + password + '@ds047166.mlab.com:47166/tetr
 
 var HighScoreSchema = new mongoose.Schema({
     name: String,
-    score: Number
+    score: Number,
+		rows: Number
 });
 
 mongoose.model('HighScore', HighScoreSchema);

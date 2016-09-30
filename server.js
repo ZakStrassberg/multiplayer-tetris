@@ -56,9 +56,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('start game', function(name) {
     console.log(name, socketId, 'joined the game')
     var newPlayer = {id: socketId, name: name, score: 0, rows: 0}
-    console.log(newPlayer)
     players.push(newPlayer)
-    console.log(players)
     io.emit('updateActivity', players[players.length - 1].name + " has started a game.")
   })
 
@@ -74,14 +72,10 @@ io.sockets.on('connection', function (socket) {
       // HIGH SCORE MANAGEMENT:
       var temp, temp2;
       for (var i = 0; i < dbScoreboard.length; i++) {
-        console.log('\n\n\n LOOP:')
-        console.log(i)
         if (dbScoreboard[i].score < endingPlayer.score && !temp) {
           console.log('high score:', endingPlayer.score)
           temp = dbScoreboard[i]
-          console.log('\n\n\n TEMP:')
-          console.log(temp)
-          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: endingPlayer.name, score: endingPlayer.score}, function(err, highScore) {
+          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: endingPlayer.name, rows: endingPlayer.rows, score: endingPlayer.score}, function(err, highScore) {
             if (err) {
               console.log(err)
             }
@@ -89,11 +83,7 @@ io.sockets.on('connection', function (socket) {
         }
         if (temp && i < 4) {
           temp2 = dbScoreboard[i+1]
-          console.log('\n\n\n')
-          console.log(i+1)
-          console.log(dbScoreboard[i+1])
-          console.log(temp)
-          HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
+          HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, rows: temp.rows, score: temp.score}, function(err, highScore) {
             if (err) {
               console.log(err)
             }
@@ -188,7 +178,7 @@ io.sockets.on('connection', function (socket) {
           temp = dbScoreboard[i]
           console.log('\n\n\n TEMP:')
           console.log(temp)
-          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: disconnectingPlayer.name, score: disconnectingPlayer.score}, function(err, highScore) {
+          HighScore.findByIdAndUpdate(dbScoreboard[i]._id, {name: disconnectingPlayer.name, rows: disconnectingPlayer.rows, score: disconnectingPlayer.score}, function(err, highScore) {
             if (err) {
               console.log(err)
             } else {
@@ -202,7 +192,7 @@ io.sockets.on('connection', function (socket) {
           console.log(i+1)
           console.log(dbScoreboard[i+1])
           console.log(temp)
-          HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, score: temp.score}, function(err, highScore) {
+          HighScore.findByIdAndUpdate(dbScoreboard[i+1]._id, {name: temp.name, rows: temp.rows, score: temp.score}, function(err, highScore) {
             if (err) {
               console.log(err)
             } else {
@@ -238,6 +228,5 @@ io.sockets.on('connection', function (socket) {
 })
 
 setInterval(function() {
-  io.emit('updateScoreboard', players)
-  // console.log(players)
+  io.volatile.emit('updateScoreboard', players)
 }, 1000)
