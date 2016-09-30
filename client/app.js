@@ -6,7 +6,8 @@ var tetris = new Vue({
 		name: '',
 		players: [],
 		messages: [],
-		highScores: []
+		highScores: [],
+		socketId: ''
 	},
 	computed: {
 		sortedPlayers: function() {
@@ -18,17 +19,17 @@ var tetris = new Vue({
 		}
 	},
 	sockets: {
-		connect: function() {},
+		connect: function() {
+			this.socketId = '/#'+this.$socket.id
+		},
 		updateScoreboard: function(activePlayers) {
 			this.players = activePlayers
-			// console.log(this.players)
 		},
 		updateActivity: function(message) { //george
 			this.messages.unshift(message)
 			while (this.messages.length > 6) {
 				this.messages.pop()
 			}
-			// console.log(this.players)
 		},
 		updateDbScoreboard: function(highScores) {
 			this.highScores = highScores
