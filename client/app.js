@@ -7,7 +7,8 @@ var tetris = new Vue({
 		players: [],
 		messages: [],
 		highScores: [],
-		socketId: ''
+		socketId: '',
+		ready: false
 	},
 	computed: {
 		sortedPlayers: function() {
@@ -38,6 +39,9 @@ var tetris = new Vue({
 	methods: {
 		hideModal: function() {
 			jQuery('#name-modal').modal('hide')
+			if (this.name) {
+				this.ready = true
+			}
 		}
 	}
 })

@@ -187,7 +187,7 @@ function keydown(ev) {
       case KEY.X:      actions.push(KEY.X);   handled = true; break;
     }
   }
-  else if (ev.keyCode == KEY.SPACE) {
+  else if (ev.keyCode == KEY.SPACE && tetris.ready) {
     play();
     handled = true;
   }
